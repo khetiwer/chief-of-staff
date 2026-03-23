@@ -24,7 +24,7 @@ These rules are absolute. Every session, every message, every scheduled run.
 
 ### Contact Files
 - **Location:** `../../_shared/contacts/` (relative to this project)
-- **Absolute path:** `C:\Users\kheti\OneDrive\Documents\AI Workspace\_shared\contacts\`
+- **Absolute path:** `%AI_WORKSPACE%\_shared\contacts\`
 - **Format:** One markdown file per person (`firstname-lastname.md`)
 - **Template:** `../PeopleCRM/_contact-template.md`
 
@@ -299,9 +299,9 @@ DO NOT:
 
 | Resource | Path |
 |----------|------|
-| Contact files | `C:\Users\kheti\OneDrive\Documents\AI Workspace\_shared\contacts\` |
-| Contact template | `C:\Users\kheti\OneDrive\Documents\AI Workspace\PersonalOS\PeopleCRM\_contact-template.md` |
-| Writing style guide | `C:\Users\kheti\OneDrive\Documents\AI Workspace\_shared\about\khet-writing-style.md` |
-| This project | `C:\Users\kheti\OneDrive\Documents\AI Workspace\PersonalOS\chief-of-staff\` |
-| PeopleCRM | `C:\Users\kheti\OneDrive\Documents\AI Workspace\PersonalOS\PeopleCRM\` |
-| Career context | `C:\Users\kheti\OneDrive\Documents\AI Workspace\_shared\career\` |
+| Contact files | `%AI_WORKSPACE%\_shared\contacts\` |
+| Contact template | `%AI_WORKSPACE%\PersonalOS\PeopleCRM\_contact-template.md` |
+| Writing style guide | `%AI_WORKSPACE%\_shared\about\khet-writing-style.md` |
+| This project | `%AI_WORKSPACE%\PersonalOS\chief-of-staff\` |
+| PeopleCRM | `%AI_WORKSPACE%\PersonalOS\PeopleCRM\` |
+| Career context | `%AI_WORKSPACE%\_shared\career\` |

@@ -544,7 +544,7 @@ AI Workspace/                          ← launch dir for CoS
 
 #### Startup Procedure
 ```bash
-cd "C:\Users\kheti\OneDrive\Documents\AI Workspace"
+cd "%AI_WORKSPACE%"
 claude --channels plugin:telegram@claude-plugins-official
 ```
 Then tell the session to read `PersonalOS/chief-of-staff/CLAUDE.md` and set up cron jobs. Session must stay open for Telegram and crons to work. Restart every 3 days.
