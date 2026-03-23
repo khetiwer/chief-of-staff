@@ -1,0 +1,19 @@
+# Personal data — never commit
+contacts/
+*.env
+*.secret
+
+# Claude Code session data
+.claude/
+
+# OneDrive artifacts
+~$*
+.~lock.*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Memory files (session-specific, not part of the brain)
+memory/
