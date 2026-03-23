@@ -3,7 +3,7 @@
 ## Quick Start (copy-paste into terminal)
 
 ```bash
-cd "%AI_WORKSPACE%"
+cd "AI Workspace"
 claude --channels plugin:telegram@claude-plugins-official
 ```
 
@@ -81,7 +81,7 @@ Send a Telegram message to Khet:
 
 "⚠️ CoS session expires soon. Restart today or tomorrow:
 
-cd "%AI_WORKSPACE%"
+cd "AI Workspace"
 claude --channels plugin:telegram@claude-plugins-official
 
 Then paste the startup prompt from start-cos.md."

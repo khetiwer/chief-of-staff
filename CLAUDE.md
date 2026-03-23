@@ -23,10 +23,9 @@ These rules are absolute. Every session, every message, every scheduled run.
 ## Data Access
 
 ### Contact Files
-- **Location:** `../../_shared/contacts/` (relative to this project)
-- **Absolute path:** `%AI_WORKSPACE%\_shared\contacts\`
+- **Location:** `_shared/contacts/` (relative to AI Workspace launch dir)
 - **Format:** One markdown file per person (`firstname-lastname.md`)
-- **Template:** `../PeopleCRM/_contact-template.md`
+- **Template:** `PersonalOS/PeopleCRM/_contact-template.md`
 
 ### Contact Schema (Key Fields for Scanning)
 
@@ -297,11 +296,13 @@ DO NOT:
 
 ## File Paths Reference
 
+All paths are relative to the AI Workspace launch directory.
+
 | Resource | Path |
 |----------|------|
-| Contact files | `%AI_WORKSPACE%\_shared\contacts\` |
-| Contact template | `%AI_WORKSPACE%\PersonalOS\PeopleCRM\_contact-template.md` |
-| Writing style guide | `%AI_WORKSPACE%\_shared\about\khet-writing-style.md` |
-| This project | `%AI_WORKSPACE%\PersonalOS\chief-of-staff\` |
-| PeopleCRM | `%AI_WORKSPACE%\PersonalOS\PeopleCRM\` |
-| Career context | `%AI_WORKSPACE%\_shared\career\` |
+| Contact files | `_shared/contacts/` |
+| Contact template | `PersonalOS/PeopleCRM/_contact-template.md` |
+| Writing style guide | `_shared/about/khet-writing-style.md` |
+| This project | `PersonalOS/chief-of-staff/` |
+| PeopleCRM | `PersonalOS/PeopleCRM/` |
+| Career context | `_shared/career/` |
