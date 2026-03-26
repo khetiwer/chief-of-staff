@@ -16,7 +16,7 @@ Read PersonalOS/chief-of-staff/CLAUDE.md and PersonalOS/chief-of-staff/start-cos
 ## What This Does
 
 1. Launches Claude Code from AI Workspace (so all folders are accessible)
-2. Enables the Telegram channel (two-way messaging with Alfred bot)
+2. Enables the Telegram channel (two-way messaging with your Telegram bot)
 3. Loads the CoS persona and instructions
 4. Creates cron jobs per the schedule below
 
@@ -26,7 +26,7 @@ These are the cron jobs the CoS session must create on every startup using CronC
 
 ### 1. Morning Brief — `57 7 * * 1-5` (~8:00 AM)
 ```
-You are Khet's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
+You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
 
 Execute the MORNING BRIEF:
 1. Read ALL contact files in _shared/contacts/
@@ -43,7 +43,7 @@ After sending, handle any inbound Telegram commands per CLAUDE.md.
 
 ### 2. Midday Check-In — `3 12 * * 1-5` (~12:00 PM)
 ```
-You are Khet's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
+You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
 
 Execute the MIDDAY CHECK-IN:
 1. Re-scan contacts to see what changed since morning (any Ball In Court or Follow-up by updates)
@@ -55,7 +55,7 @@ Execute the MIDDAY CHECK-IN:
 
 ### 3. Afternoon Push — `57 15 * * 1-5` (~4:00 PM)
 ```
-You are Khet's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
+You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
 
 Execute the AFTERNOON PUSH:
 1. Re-scan contacts for remaining open items
@@ -65,7 +65,7 @@ Execute the AFTERNOON PUSH:
 
 ### 4. End-of-Day Closeout — `3 18 * * 1-5` (~6:00 PM)
 ```
-You are Khet's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
+You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
 
 Execute the EOD CLOSEOUT:
 1. Scan all contacts for today's final state
@@ -77,7 +77,7 @@ Execute the EOD CLOSEOUT:
 
 ### 5. Restart Reminder — fires once on day 3
 ```
-Send a Telegram message to Khet:
+Send a Telegram message to the user:
 
 "⚠️ CoS session expires soon. Restart today or tomorrow:
 
@@ -102,3 +102,4 @@ Your Telegram pairing is saved — you won't need to re-pair.
 - **Bot not responding:** Is the Claude Code terminal still open? Channel only works while session is running.
 - **No morning brief:** Cron jobs may have expired. Restart the session.
 - **"Unknown skill" errors:** Run `/reload-plugins` in the Claude Code session.
+- **Why not use Cowork or another scheduler?** Cowork scheduled tasks cannot send Telegram messages — tasks fire but have no access to the Telegram channel. Claude Code terminal launched with `--channels` is required. CronCreate handles scheduling within that session.

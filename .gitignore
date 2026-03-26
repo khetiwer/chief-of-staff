@@ -1,7 +1,18 @@
-# Personal data — never commit
-contacts/
+# Personal runtime data — never publish
+state/
+sessions/
+reports/
+
+# Personal planning and context — not portfolio content
+PLAN.md
+network-accountability-agent-spec.md
+
+# Secrets and credentials
 *.env
+.env.*
 *.secret
+*.key
+*.pem
 
 # Claude Code session data
 .claude/
