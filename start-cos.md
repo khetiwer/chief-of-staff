@@ -7,7 +7,15 @@ cd "AI Workspace"
 claude --channels plugin:telegram@claude-plugins-official
 ```
 
-Then paste this into the Claude Code session:
+Then run this slash command in the Claude Code session:
+
+```
+/start-cos
+```
+
+The `/start-cos` command is a global slash command stored at `~/.claude/commands/start-cos.md`. It reads CLAUDE.md, reads this file, checks for an existing slate (mid-day session restart recovery), and either resumes or runs the full brief + cron setup.
+
+**First time on a new machine:** The global command won't exist yet. Paste this manually instead, then recreate the command file at `~/.claude/commands/start-cos.md` (contents in the section below).
 
 ```
 Read PersonalOS/chief-of-staff/CLAUDE.md and PersonalOS/chief-of-staff/start-cos.md — you are my Chief of Staff. Set up all cron jobs defined in the Cron Schedule section of start-cos.md, then run the morning brief.
@@ -84,7 +92,7 @@ Send a Telegram message to the user:
 cd "AI Workspace"
 claude --channels plugin:telegram@claude-plugins-official
 
-Then paste the startup prompt from start-cos.md."
+Then run /start-cos"
 ```
 This is a one-shot cron (recurring: false) set for 72 hours after session start.
 
@@ -103,3 +111,18 @@ Your Telegram pairing is saved — you won't need to re-pair.
 - **No morning brief:** Cron jobs may have expired. Restart the session.
 - **"Unknown skill" errors:** Run `/reload-plugins` in the Claude Code session.
 - **Why not use Cowork or another scheduler?** Cowork scheduled tasks cannot send Telegram messages — tasks fire but have no access to the Telegram channel. Claude Code terminal launched with `--channels` is required. CronCreate handles scheduling within that session.
+- **`/start-cos` not found:** The global command file is missing. Create `~/.claude/commands/start-cos.md` using the contents in the section below.
+
+## /start-cos Command File
+
+Store this at `~/.claude/commands/start-cos.md`. Not tracked in git — must be created manually on each machine.
+
+```markdown
+You are my Chief of Staff. Execute the following startup sequence:
+
+1. Read `PersonalOS/chief-of-staff/CLAUDE.md` — this is your full operating instructions and persona.
+2. Read `PersonalOS/chief-of-staff/start-cos.md` — this has the cron schedule definitions.
+3. Check whether `PersonalOS/chief-of-staff/state/today.md` exists and is dated today.
+   - If yes: resume from it. Do not re-run the full brief. Send the existing slate to Telegram with a note: "Resuming from earlier session."
+   - If no: set up all cron jobs defined in the Cron Schedule section of start-cos.md, then run the morning brief.
+```
