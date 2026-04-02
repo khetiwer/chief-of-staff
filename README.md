@@ -31,13 +31,14 @@ It does not wait to be asked. It pushes.
 | Module | Status | Description |
 |---|---|---|
 | Networking | ✅ Live | Contact CRM, daily brief, follow-up tracking |
-| State Persistence | 🔲 Building | Daily slate survives session restarts |
-| Gmail Networking Scan | 🔲 Building | Auto-detects replies from tracked contacts |
-| Calendar Awareness | 🔲 Building | Today's events in the morning brief |
-| Meeting Prep (`prep`) | 🔲 Building | Pre-meeting brief from contact file |
-| Inbox Triage (`triage`) | 🔲 Building | Full inbox scan via Gmail Triager skill |
-| Relationship Health (`enrich`) | 🔲 Building | Proactive staleness scan across all contacts |
-| Weekly Report (`weekly`) | 🔲 Building | Job search pipeline summary |
+| State Persistence | ✅ Live | Daily slate survives session restarts |
+| Gmail Networking Scan | ✅ Live | Auto-detects replies from tracked contacts |
+| Calendar Awareness | ✅ Live | Today's events in the morning brief |
+| Meeting Prep (`prep`) | ✅ Live | Pre-meeting brief from contact file |
+| Inbox Triage (`triage`) | ✅ Live | Full inbox scan via Gmail Triager skill |
+| Relationship Health (`enrich`) | ✅ Live | Proactive staleness scan across all contacts |
+| Weekly Report (`weekly`) | ✅ Live | Pipeline summary from session logs |
+| Goals Tracking | ✅ Live | Weekly targets wired into brief and weekly report |
 
 ---
 
@@ -67,6 +68,10 @@ It does not wait to be asked. It pushes.
 | `log [name] [notes]` | Add interaction entry to contact file |
 | `update [name] [field] [value]` | Update CRM metadata |
 | `status` | Today's task status (complete / open / skipped) |
+| `met [name]` | Log a completed networking conversation, increments weekly count |
+| `applied [company]` | Log a job application, increments weekly count |
+| `post [content\|free]` | Log a LinkedIn post, increments weekly count |
+| `habits [items]` | Log completed habits for the day |
 
 ---
 
@@ -79,7 +84,7 @@ It does not wait to be asked. It pushes.
 - Telegram bot configured (see `.claude/settings.local.json`)
 
 ### Contact Files
-Contacts live in `_shared/contacts/` as markdown files (`firstname-lastname.md`). Each file follows the schema in `SPEC.md`. The agent reads these files — it does not write to any database.
+Contacts live in `_shared/contacts/` as markdown files (`firstname-lastname.md`). The agent reads these files — it does not write to any database. The full contact file schema is documented in `SPEC.md`; for a standalone PeopleCRM setup, that schema belongs in its own README.
 
 ### Key Paths (configure for your setup)
 ```
@@ -102,7 +107,7 @@ Send `brief` in Telegram to run the first morning brief.
 
 ## What Gets Published vs. What Stays Private
 
-**Published (this repo):** `CLAUDE.md`, `README.md`, `SPEC.md`, `PLAN.md`, `.gitignore`, `.claude/settings.local.json`
+**Published (this repo):** `CLAUDE.md`, `README.md`, `SPEC.md`, `.gitignore`, `.claude/settings.local.json`
 
 **Never published (gitignored):** `state/`, `sessions/`, `reports/`
 
@@ -114,7 +119,6 @@ Send `brief` in Telegram to run the first morning brief.
 
 - `README.md` — This file. What/why/setup/usage.
 - `SPEC.md` — Architecture decisions, module behavioral specs, data schemas.
-- `PLAN.md` — Living build plan. Task list, status, what's next.
 - `CLAUDE.md` — The agent's full operating instructions. Start here to understand behavior.
 
 ---
@@ -131,4 +135,4 @@ Send `brief` in Telegram to run the first morning brief.
 
 ## Status
 
-Active development. See `PLAN.md` for current build phase and task list.
+All core modules live. See `SPEC.md` for architecture details and `CLAUDE.md` for the full behavioral specification.
