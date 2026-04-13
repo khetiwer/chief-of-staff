@@ -96,18 +96,35 @@ Career context:  [your-workspace]/_shared/career/
 Update the paths in `CLAUDE.md` to match your directory structure.
 
 ### First Run
-```bash
-cd [your-chief-of-staff-directory]
-claude --channels plugin:telegram@claude-plugins-official
+
+**1. Allow PowerShell scripts** (once per machine):
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-Send `brief` in Telegram to run the first morning brief.
+**2. Add the `cos` shortcut to your PowerShell profile** (`~\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1`):
+```powershell
+function cos {
+    & "[your-path]\chief-of-staff\scripts\launch-cos.ps1"
+}
+```
+
+**3. Launch:**
+```powershell
+cos
+```
+
+The script kills any zombie bun processes before starting, then launches Claude from the correct working directory with the Telegram channel enabled. Open a new PowerShell window after editing the profile for the shortcut to take effect.
+
+Then type `/start-cos` in the Claude Code session and send `brief` in Telegram to run the first morning brief.
+
+See `start-cos.md` for the full launch reference.
 
 ---
 
 ## What Gets Published vs. What Stays Private
 
-**Published (this repo):** `CLAUDE.md`, `README.md`, `SPEC.md`, `.gitignore`, `.claude/settings.local.json`
+**Published (this repo):** `CLAUDE.md`, `README.md`, `SPEC.md`, `.gitignore`, `.claude/settings.local.json`, `scripts/`
 
 **Never published (gitignored):** `state/`, `sessions/`, `reports/`
 

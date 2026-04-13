@@ -18,10 +18,12 @@ Three files carry context between sessions. All are gitignored.
 
 ```
 state/today.md      — Daily slate. Written at brief, updated through day, archived at EOD.
-state/goals.md      — Job search goals and pipeline targets.
+state/goals.md      — Weekly targets, active builds, strategy note. Reset weekly.
 sessions/YYYY-MM-DD.md  — Daily log. Written at EOD closeout.
 reports/YYYY-MM-DD.md   — Weekly pipeline summaries. Written by `weekly` command.
 ```
+
+**Context compaction hooks** (`.claude/settings.local.json`): A `PreCompact` hook forces a state save to `today.md` before Claude Code compresses the context window. A `PostCompact` hook reloads `today.md` after compression completes. Without these, a session that hits context limits mid-day goes deaf to incoming Telegram messages — the hooks keep it alive through compaction. This is the primary reliability mechanism for long-running sessions.
 
 ### Contact CRM
 
@@ -303,6 +305,8 @@ Completed: N | Skipped: N | Rolled: [names]
 
 **Rule:** Never load full interaction history for more than 5 contacts in a single operation. Scan metadata → flag → read full file only for flagged.
 
+**Compaction resilience:** Sessions that run all day (morning brief → midday → afternoon → EOD) accumulate significant context. When the context window approaches its limit, Claude Code auto-compacts. The PreCompact/PostCompact hooks ensure `today.md` is always current before compression and reloaded after — so the agent can continue operating without manual restart.
+
 ---
 
 ## Decision Log
@@ -317,3 +321,5 @@ Completed: N | Skipped: N | Rolled: [names]
 | Work COS | Separate future agent | Extend this agent | Work and personal context should not bleed; credentials differ |
 | `done` command flow | Gmail-first: check sent mail before asking user | Ask user immediately | Gap found after first live brief — sent email contains the full interaction detail; asking user is redundant when Gmail has the answer |
 | `done` command as skill | Kept inline in CLAUDE.md | Extract to Agentman skill | Flow is deeply contextual — requires today's brief, CRM schema, and conversational fallback when Gmail has no match. Skills are stateless; this is a behavior branch, not a reusable tool |
+| Session reliability | PreCompact/PostCompact hooks + launch script with bun zombie cleanup | Watchdog heartbeat monitor | Hooks address the root cause (session going deaf after compaction). Zombie cleanup on launch prevents split-delivery where two bun pollers compete for the same Telegram messages. A heartbeat watchdog was considered but rejected — it can't detect the specific failure mode where messages never reach Claude at all, only Claude's silence |
+| Launch script location | `scripts/launch-cos.ps1` inside the project | `~/.claude/scripts/` global folder | Script exists solely to launch the COS — has no purpose outside this project. Belongs with the project so it's versioned, discoverable, and documented alongside the rest of the setup |
