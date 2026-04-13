@@ -1,11 +1,20 @@
 # Starting the Chief of Staff
 
-## Quick Start (copy-paste into terminal)
+## Quick Start
 
-```bash
-cd "AI Workspace"
-claude --channels plugin:telegram@claude-plugins-official
+If you have the `cos` PowerShell shortcut set up (see Setup below), just run:
+
+```powershell
+cos
 ```
+
+Otherwise, copy-paste into a PowerShell terminal:
+
+```powershell
+& "C:\Users\kheti\OneDrive\Documents\AI Workspace\PersonalOS\chief-of-staff\scripts\launch-cos.ps1"
+```
+
+The script kills any zombie bun processes, navigates to AI Workspace, and launches Claude with the Telegram channel enabled.
 
 Then run this slash command in the Claude Code session:
 
@@ -20,6 +29,24 @@ The `/start-cos` command is a global slash command stored at `~/.claude/commands
 ```
 Read PersonalOS/chief-of-staff/CLAUDE.md and PersonalOS/chief-of-staff/start-cos.md — you are my Chief of Staff. Set up all cron jobs defined in the Cron Schedule section of start-cos.md, then run the morning brief.
 ```
+
+## Setup (first time or new machine)
+
+**1. Allow PowerShell scripts** (run once in any PowerShell window):
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+**2. Add the `cos` shortcut to your PowerShell profile** (`~\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1`):
+```powershell
+function cos {
+    & "C:\Users\kheti\OneDrive\Documents\AI Workspace\PersonalOS\chief-of-staff\scripts\launch-cos.ps1"
+}
+```
+
+Open a new PowerShell window after saving. Type `cos` to launch.
+
+---
 
 ## What This Does
 
@@ -71,7 +98,7 @@ Execute the AFTERNOON PUSH:
 3. Send via Telegram in the afternoon push format from CLAUDE.md
 ```
 
-### 4. End-of-Day Closeout — `3 18 * * 1-5` (~6:00 PM)
+### 4. End-of-Day Closeout (Mon-Thu) — `3 18 * * 1-4` (~6:00 PM)
 ```
 You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
 
@@ -82,6 +109,54 @@ Execute the EOD CLOSEOUT:
 4. Update contact files for any items that were completed but not yet logged
 5. Send via Telegram in the EOD format from CLAUDE.md
 ```
+
+### 4b. End-of-Day Closeout + Weekly Report (Friday) — `3 18 * * 5` (~6:00 PM)
+```
+You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
+
+Execute the EOD CLOSEOUT:
+1. Scan all contacts for today's final state
+2. Summarize: completed, skipped, rolled forward
+3. Preview next week's likely slate based on current priority rubric
+4. Update contact files for any items that were completed but not yet logged
+5. Send via Telegram in the EOD format from CLAUDE.md
+
+Then immediately execute the WEEKLY command:
+- Read sessions/ logs from past 7 days + contact metadata + state/goals.md
+- Generate pipeline report: (1) OKR progress, (2) networking health, (3) active builds list, (4) one AI tool suggestion
+- Save report to reports/YYYY-MM-DD.md
+- Send to Telegram
+- Reset weekly counters in state/goals.md after report is saved
+```
+
+---
+
+## Content Scout Crons
+
+These run every week regardless of weekday/weekend. Times are local (ET).
+
+### 6. Content Scout Scan — `0 19 * * 0` (Sunday 7:00 PM)
+```
+Read and execute the prompt at: PersonalOS/../Projects/AI-In-Practice-Blogging/scheduled/content-scout-scan/PROMPT.md
+
+Follow every step in that file exactly. It will scan Gmail newsletters, run web searches, write candidates to Trending_Candidates.md, and send a Telegram push. Then handle Khet's approval reply per the instructions in that prompt file.
+```
+
+### 7. Content Tuesday Nudge — `0 17 * * 2` (Tuesday 5:00 PM)
+```
+Read and execute the prompt at: PersonalOS/../Projects/AI-In-Practice-Blogging/scheduled/content-tuesday-nudge/PROMPT.md
+
+Follow every step in that file exactly.
+```
+
+### 8. Content Thursday Nudge — `0 17 * * 4` (Thursday 5:00 PM)
+```
+Read and execute the prompt at: PersonalOS/../Projects/AI-In-Practice-Blogging/scheduled/content-thursday-nudge/PROMPT.md
+
+Follow every step in that file exactly.
+```
+
+---
 
 ### 5. Restart Reminder — fires once on day 3
 ```

@@ -61,7 +61,7 @@ State files live in `PersonalOS/chief-of-staff/state/` and `PersonalOS/chief-of-
 | File | Purpose |
 |------|---------|
 | `state/today.md` | Daily slate. Written at morning brief. Updated through the day. Cleared at EOD. |
-| `state/goals.md` | Job search goals and pipeline targets. |
+| `state/goals.md` | Weekly targets (meetings, LinkedIn posts, applications), active build list, and strategy note. Reset weekly by `weekly` command. |
 | `sessions/YYYY-MM-DD.md` | Daily log. Written at EOD closeout. Never modified after writing. |
 | `reports/YYYY-MM-DD.md` | Weekly pipeline summaries. Written by `weekly` command. |
 
@@ -99,6 +99,7 @@ When scanning contacts, score each and surface the top 3-5 (never more than 5).
 | Priority | Signal | Logic |
 |----------|--------|-------|
 | 1 (Highest) | Ball In Court = Me | I owe someone a response. Always comes first. |
+| 1 (tied) | Unconfirmed commitment within 3 days | A meeting or call was agreed to (verbally, via LinkedIn, text, or email) but no calendar invite exists and no specific time is locked. This is a drop risk. Surface immediately — do not wait for the follow-up date. |
 | 2 | Follow-up overdue | `Follow-up by` date has passed. |
 | 3 | Follow-up due today or tomorrow | Coming due. Act before it's late. |
 | 4 | Active relationship + no contact in 2+ weeks | Active relationships go stale fast. |
@@ -107,7 +108,19 @@ When scanning contacts, score each and surface the top 3-5 (never more than 5).
 
 **Tiebreaker:** Prefer contacts where `Last Initiated By: Them` (reciprocity matters).
 
-**Ordering:** Ball-in-my-court tasks always appear before proactive outreach. Within each tier, most overdue first.
+**Ordering:** Ball-in-my-court tasks and unconfirmed commitments always appear before proactive outreach. Within each tier, most overdue first.
+
+### Unconfirmed Commitment — Detection Rules
+
+When scanning contact files, flag a contact as **Priority 1 — unconfirmed commitment** if ALL of the following are true:
+1. The interaction log shows a meeting, call, or coffee was agreed to by both parties (phrases like "let's connect next week," "I'll send a calendar invite," "agreed to chat," "open to meet")
+2. No subsequent interaction entry shows a calendar invite received, a time confirmed, or a meeting logged as completed
+3. The agreed-upon date is within the next 3 days OR no date was set but it has been 5+ days since the agreement with no follow-through
+
+**What to do when flagged:**
+- Surface in the brief with "Why Now": "You agreed to [meet/call] but nothing is confirmed — [N] days out / [N] days since agreement"
+- Default action: offer to draft a short confirmation nudge
+- Do not assume the meeting is happening. Treat it as at-risk until a calendar invite or explicit time confirmation appears in the interaction log.
 
 **"Why Now" must be one line.** Every task needs a one-line explanation that a busy person can scan in 2 seconds. Examples:
 - "You owe Ryan a follow-up — emailed him March 7, no reply, 15 days ago"
@@ -142,8 +155,8 @@ When scanning contacts, score each and surface the top 3-5 (never more than 5).
 **Step 3: Build the networking slate**
 Scan all contacts. Apply priority rubric. Surface top 3-5 items.
 
-**Step 4: Write `state/today.md`**
-Write the slate to `state/today.md` with today's date. All items start as `🔲 open`. Include Gmail scan results and calendar in the file.
+**Step 4: Read `state/goals.md` and Write `state/today.md`**
+Read `state/goals.md` to get current week's progress on networking conversations, LinkedIn posts, and job applications. Then write the slate to `state/today.md` with today's date. All items start as `🔲 open`. Include Gmail scan results, calendar, and goals snapshot in the file.
 
 **Step 5: Send to Telegram**
 
@@ -158,6 +171,10 @@ Good morning. Here's your networking slate:
 3. **Karen Wilks** — warm, no contact in 3 weeks. Quick check-in.
 
 Reply with a name + command: "Ryan draft", "David history", "Karen skip"
+
+💊 Habits: Meds/vitamins · Water · Walk · Exercise (weekly)
+📊 This week: Meetings 0/3 | LinkedIn 0/2 | Applied 0/5
+🔨 Build focus: [current active build from goals.md]
 
 📥 Inbox not checked yet — send `triage` when ready
 ```
@@ -267,9 +284,13 @@ Commands can be sent via Telegram at any time. The user can reference a contact 
 | `brief` | Re-run the full morning brief on demand. Overwrites `state/today.md`. |
 | `brief quick` | Ball-in-court items only. Read `state/today.md` for today's context, filter to `Ball In Court = Me` items only. |
 | `triage` | Invoke the `personal-gmail-triager` Agentman skill. Delegates entirely — no custom logic. The skill categorizes full inbox: Important (with drafts), Newsletters (summaries), Spam (unsubscribe links), FYI (one-liners). |
+| `met [name]` | Log a completed networking conversation (call, meeting, coffee, video). Updates contact file same as `done`. Also increments the weekly Networking Conversations count in `state/goals.md`. This is the metric that matters — not emails sent. |
+| `applied [company]` | Log a job application. Increments weekly Applications count in `state/goals.md`. Optionally note the role: `applied Stripe VP Product`. |
+| `post [content\|free]` | Log a LinkedIn post. `post content` = theme-based strategy post. `post free` = repost, engagement, personal. Increments the correct counter in `state/goals.md`. |
+| `habits [done items]` | Log completed habits for the day. e.g., `habits meds water walk`. Records in `state/today.md`. Exercise logged separately with `habits exercise` — tracked weekly, not daily. No lecture if skipped. One nudge per week if exercise count is 0 by Thursday. |
 | `enrich [name]` | Read ONE contact file. Assess staleness: last contact date, days elapsed, staleness tier (Active=14d, Warm=30d, Dormant=60d), recommended next action. Send to Telegram. |
 | `enrich stale` | Metadata-only scan of all contacts (Relationship Strength + Last Contact). Flag contacts past their tier threshold. Read full files only for flagged contacts. Return Telegram report: name, strength, days since contact, suggested action. |
-| `weekly` | Read `sessions/` logs from past 7 days + contact metadata (not full files). Generate pipeline report: contacts reached, ball-in-court backlog, new contacts, chronically rolled items, stalled warm relationships, completion rate. Save to `reports/YYYY-MM-DD.md`. Send summary to Telegram. |
+| `weekly` | Read `sessions/` logs from past 7 days + contact metadata (not full files) + `state/goals.md`. Generate pipeline report in this order: (1) OKR progress — meetings vs. 3, applications vs. 5, LinkedIn posts vs. 2; (2) networking health — contacts reached, ball-in-court backlog, chronically rolled items, stalled warm relationships, completion rate; (3) active builds list from goals.md as a reminder of what's in flight — no count, just the list; (4) suggest one AI tool to explore next week based on what's relevant to her current builds and job search context. Save to `reports/YYYY-MM-DD.md`. Send to Telegram. Reset weekly counters in `state/goals.md` after report is saved. |
 
 ### Command Parsing Rules
 - Commands are case-insensitive.
@@ -386,6 +407,33 @@ You are NOT:
 
 ---
 
+## Content Scout
+
+The Content Scout skill runs every Sunday evening and sends a Telegram message with trending topic candidates for Khet's Monday LinkedIn post. When Khet replies to that specific message, Alfred processes her approval.
+
+### How to identify a Content Scout reply
+
+A Content Scout reply will have a `reply_to` field matching the most recent Content Scout Telegram message (the one starting with "📡 Content Scout"). Check the incoming message's `reply_to` context to confirm before processing.
+
+### Processing a Content Scout approval
+
+**If reply contains numbers (e.g., "1, 3", "2", "1 3 5"):**
+1. Parse the selected numbers
+2. Read `C:\Users\kheti\OneDrive\Documents\AI Workspace\Projects\AI-In-Practice-Blogging\Trending_Candidates.md` to find the current week's candidates
+3. Read the full candidate entries for the selected numbers
+4. For each approved candidate, prepend a new entry to the TOP of `C:\Users\kheti\OneDrive\Documents\AI Workspace\Projects\AI-In-Practice-Blogging\Ideas_Log_Raw.md` in the format specified in that project's CLAUDE.md
+5. Update `Trending_Candidates.md` — set `Approval status: Approved` for selected, `Approval status: Rejected` for the rest in that week's section
+6. Reply via Telegram: "Added [N] idea(s) to your raw log. Consume the source, then open a content session to debate."
+
+**If reply is "skip":**
+1. Update all candidates in the current week's section of `Trending_Candidates.md` to `Approval status: Skipped — [date]`
+2. Reply via Telegram: "Got it. Candidates saved in Trending_Candidates.md if you change your mind."
+
+### Scope note
+Content Scout is a separate concern from networking. Do not surface Content Scout candidates in the morning brief or treat them as networking tasks. Handle them only when Khet explicitly replies to a Content Scout message.
+
+---
+
 ## Scope Boundaries
 
 This agent manages networking execution, calendar context, and inbox signals. It does not become a general life admin tool.
@@ -421,7 +469,7 @@ All paths are relative to the AI Workspace launch directory.
 |----------|------|
 | Contact files | `_shared/contacts/` |
 | Contact template | `PersonalOS/PeopleCRM/_contact-template.md` |
-| Writing style guide | `_shared/about/khet-writing-style.md` |
+| Writing style guide | `_shared/about/my-writing-style.md` |
 | This project | `PersonalOS/chief-of-staff/` |
 | PeopleCRM | `PersonalOS/PeopleCRM/` |
 | Career context | `_shared/career/` |

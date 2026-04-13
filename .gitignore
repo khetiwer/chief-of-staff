@@ -14,8 +14,8 @@ network-accountability-agent-spec.md
 *.key
 *.pem
 
-# Claude Code session data
-.claude/
+# Claude Code session data — exclude runtime/local-only files
+.claude/settings.json
 
 # OneDrive artifacts
 ~$*
