@@ -11,10 +11,10 @@ cos
 Otherwise, copy-paste into a PowerShell terminal:
 
 ```powershell
-& "C:\Users\kheti\OneDrive\Documents\AI Workspace\PersonalOS\chief-of-staff\scripts\launch-cos.ps1"
+& "C:\Users\kheti\workspaces\alfred\scripts\launch-cos.ps1"
 ```
 
-The script kills any zombie bun processes, navigates to AI Workspace, and launches Claude with the Telegram channel enabled.
+The script kills any zombie bun processes, navigates to the alfred workspace, and launches Claude with the Telegram channel enabled.
 
 Then run this slash command in the Claude Code session:
 
@@ -22,12 +22,12 @@ Then run this slash command in the Claude Code session:
 /start-cos
 ```
 
-The `/start-cos` command is a global slash command stored at `~/.claude/commands/start-cos.md`. It reads CLAUDE.md, reads this file, checks for an existing slate (mid-day session restart recovery), and either resumes or runs the full brief + cron setup.
+The `/start-cos` command is a global slash command stored at `~/.claude/commands/start-cos.md`. It reads CLAUDE.md, reads this file, checks for an existing brief at `C:\Users\kheti\brain\daily\<today>.md`, and either resumes from it or runs the full brief + cron setup.
 
 **First time on a new machine:** The global command won't exist yet. Paste this manually instead, then recreate the command file at `~/.claude/commands/start-cos.md` (contents in the section below).
 
 ```
-Read PersonalOS/chief-of-staff/CLAUDE.md and PersonalOS/chief-of-staff/start-cos.md — you are my Chief of Staff. Set up all cron jobs defined in the Cron Schedule section of start-cos.md, then run the morning brief.
+Read CLAUDE.md and start-cos.md — you are my Chief of Staff. Set up the runtime cron jobs defined in the Cron Schedule section of start-cos.md (midday + afternoon nudges + Content Scout), then read today's brief at C:\Users\kheti\brain\daily\<today>.md and send the morning digest to Telegram. The morning brief itself, EOD wrap, and nightly-organize run via Windows Task Scheduler from the brain folder per the 2026-05-13 concern 1 architecture.
 ```
 
 ## Setup (first time or new machine)
@@ -40,7 +40,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 **2. Add the `cos` shortcut to your PowerShell profile** (`~\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1`):
 ```powershell
 function cos {
-    & "C:\Users\kheti\OneDrive\Documents\AI Workspace\PersonalOS\chief-of-staff\scripts\launch-cos.ps1"
+    & "C:\Users\kheti\workspaces\alfred\scripts\launch-cos.ps1"
 }
 ```
 
@@ -50,108 +50,83 @@ Open a new PowerShell window after saving. Type `cos` to launch.
 
 ## What This Does
 
-1. Launches Claude Code from AI Workspace (so all folders are accessible)
+1. Launches Claude Code from the alfred workspace (cross-cwd reads use absolute paths spelled out in CLAUDE.md)
 2. Enables the Telegram channel (two-way messaging with your Telegram bot)
 3. Loads the CoS persona and instructions
 4. Creates cron jobs per the schedule below
 
 ## Cron Schedule
 
-These are the cron jobs the CoS session must create on every startup using CronCreate. All times are local (ET). Weekdays only.
+These are the **runtime crons** the CoS session must create on every startup using CronCreate. All times are local (ET). Weekdays only unless noted.
 
-### 1. Morning Brief — `57 7 * * 1-5` (~8:00 AM)
-```
-You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
+Per the 2026-05-13 concern 1 architecture, the `morning-brief`, `end-of-day-wrap`, and `nightly-organize` skills run via Windows Task Scheduler from the brain folder — NOT via Alfred's CronCreate. Alfred's runtime crons cover only midday + afternoon nudges (no synthesis needed) and Content Scout. Once a startup session creates these runtime crons, the heavy scheduled jobs already fire from Task Scheduler regardless of Alfred's session state.
 
-Execute the MORNING BRIEF:
-1. Read ALL contact files in _shared/contacts/
-2. For each contact, check: Ball In Court, Follow-up by, Relationship Strength, Last Contact, Last Initiated By, tags
-3. Check Gmail for any new replies from tracked contacts since their Last Contact date. Update CRM if anything changed.
-4. Apply the priority rubric to score and rank contacts
-5. Select top 3-5 (cap at 5) most urgent tasks
-6. For each task: contact name, task type, one-line "why now"
-7. Send the brief via Telegram in the morning brief format from CLAUDE.md
+### 1. Morning digest send — fires once at startup (Alfred runtime, not a cron)
 
-If nothing is due, say so honestly. Don't manufacture busywork.
-After sending, handle any inbound Telegram commands per CLAUDE.md.
-```
+At startup, after creating the cron jobs below, Alfred reads `C:\Users\kheti\brain\daily\<today>.md` (already written by Task Scheduler at 6 AM) and sends the morning Telegram digest per the Morning digest format in CLAUDE.md. This is a one-time action at session start, not a recurring cron.
 
 ### 2. Midday Check-In — `3 12 * * 1-5` (~12:00 PM)
 ```
-You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
+You are the user's Chief of Staff. Read CLAUDE.md for full instructions.
 
 Execute the MIDDAY CHECK-IN:
-1. Re-scan contacts to see what changed since morning (any Ball In Court or Follow-up by updates)
-2. Check Gmail for new replies from this morning's assigned contacts
-3. Show status: what's done, what's still open
-4. Push toward action — offer to draft something right now
-5. Send via Telegram in the midday format from CLAUDE.md
+1. Read C:\Users\kheti\brain\daily\<today>.md.
+2. Count open vs done vs skipped items across the actionable sections (**Today's slate** and **Needs a nudge**). Use the status markers from the brief contract (- [ ] / - [x] / → skipped / ⏭ snoozed).
+3. Compose a short Telegram nudge per the Midday format in CLAUDE.md.
+4. Send via Telegram.
+
+No CRM synthesis. No Gmail rescan. Read the file, count, nudge.
 ```
 
 ### 3. Afternoon Push — `57 15 * * 1-5` (~4:00 PM)
 ```
-You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
+You are the user's Chief of Staff. Read CLAUDE.md for full instructions.
 
 Execute the AFTERNOON PUSH:
-1. Re-scan contacts for remaining open items
-2. If tasks remain, be direct and pushy — short message, pick one, offer to draft
-3. Send via Telegram in the afternoon push format from CLAUDE.md
+1. Read C:\Users\kheti\brain\daily\<today>.md.
+2. Count remaining open items.
+3. If items remain, compose a short, sharp Telegram message per the Afternoon Push format in CLAUDE.md. Pushy, not pestering.
+4. Send via Telegram.
+
+No CRM synthesis. No Gmail rescan.
 ```
 
-### 4. End-of-Day Closeout (Mon-Thu) — `3 18 * * 1-4` (~6:00 PM)
+### 4. End-of-Day digest send — `15 18 * * 1-5` (~6:15 PM)
 ```
-You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
+You are the user's Chief of Staff. Read CLAUDE.md for full instructions.
 
-Execute the EOD CLOSEOUT:
-1. Scan all contacts for today's final state
-2. Summarize: completed, skipped, rolled forward
-3. Preview tomorrow's likely slate based on current priority rubric
-4. Update contact files for any items that were completed but not yet logged
-5. Send via Telegram in the EOD format from CLAUDE.md
-```
+Execute the EOD DIGEST:
+1. Read C:\Users\kheti\brain\daily\<today>.md. Task Scheduler's `end-of-day-wrap` job should have run at 6 PM and flipped status to closed. If status is still `active`, log a system event and proceed with what's there.
+2. Compose the EOD Telegram summary per the EOD format in CLAUDE.md.
+3. On Friday, also read C:\Users\kheti\brain\daily\reports\<today>-weekly.md (generated by the same Task Scheduler job on Fridays) and send the weekly digest per the Weekly format.
+4. Send via Telegram.
 
-### 4b. End-of-Day Closeout + Weekly Report (Friday) — `3 18 * * 5` (~6:00 PM)
-```
-You are the user's Chief of Staff. Read PersonalOS/chief-of-staff/CLAUDE.md for full instructions.
-
-Execute the EOD CLOSEOUT:
-1. Scan all contacts for today's final state
-2. Summarize: completed, skipped, rolled forward
-3. Preview next week's likely slate based on current priority rubric
-4. Update contact files for any items that were completed but not yet logged
-5. Send via Telegram in the EOD format from CLAUDE.md
-
-Then immediately execute the WEEKLY command:
-- Read sessions/ logs from past 7 days + contact metadata + state/goals.md
-- Generate pipeline report: (1) OKR progress, (2) networking health, (3) active builds list, (4) one AI tool suggestion
-- Save report to reports/YYYY-MM-DD.md
-- Send to Telegram
-- Reset weekly counters in state/goals.md after report is saved
+The Task Scheduler job writes the canonical files; this cron only renders the Telegram surface.
 ```
 
 ---
 
 ## Content Scout Crons
 
-These run every week regardless of weekday/weekend. Times are local (ET).
+These run every week regardless of weekday/weekend. Times are local (ET). Unchanged in chunk 6.
 
 ### 6. Content Scout Scan — `0 19 * * 0` (Sunday 7:00 PM)
 ```
-Read and execute the prompt at: PersonalOS/../Projects/AI-In-Practice-Blogging/scheduled/content-scout-scan/PROMPT.md
+Read and execute the prompt at: ../ai-in-practice/scheduled/content-scout-scan/PROMPT.md
 
 Follow every step in that file exactly. It will scan Gmail newsletters, run web searches, write candidates to Trending_Candidates.md, and send a Telegram push. Then handle Khet's approval reply per the instructions in that prompt file.
 ```
 
 ### 7. Content Tuesday Nudge — `0 17 * * 2` (Tuesday 5:00 PM)
 ```
-Read and execute the prompt at: PersonalOS/../Projects/AI-In-Practice-Blogging/scheduled/content-tuesday-nudge/PROMPT.md
+Read and execute the prompt at: ../ai-in-practice/scheduled/content-tuesday-nudge/PROMPT.md
 
 Follow every step in that file exactly.
 ```
 
 ### 8. Content Thursday Nudge — `0 17 * * 4` (Thursday 5:00 PM)
 ```
-Read and execute the prompt at: PersonalOS/../Projects/AI-In-Practice-Blogging/scheduled/content-thursday-nudge/PROMPT.md
+Read and execute the prompt at: ../ai-in-practice/scheduled/content-thursday-nudge/PROMPT.md
 
 Follow every step in that file exactly.
 ```
@@ -164,7 +139,7 @@ Send a Telegram message to the user:
 
 "⚠️ CoS session expires soon. Restart today or tomorrow:
 
-cd "AI Workspace"
+cd C:\Users\kheti\workspaces\alfred
 claude --channels plugin:telegram@claude-plugins-official
 
 Then run /start-cos"
@@ -185,6 +160,7 @@ Your Telegram pairing is saved — you won't need to re-pair.
 - **Bot not responding:** Is the Claude Code terminal still open? Channel only works while session is running.
 - **No morning brief:** Cron jobs may have expired. Restart the session.
 - **"Unknown skill" errors:** Run `/reload-plugins` in the Claude Code session.
+- **Brief skill fails or hangs:** Alfred can still render a Telegram nudge from the prior day's brief; surface the failure as a System event in the EOD addendum.
 - **Why not use Cowork or another scheduler?** Cowork scheduled tasks cannot send Telegram messages — tasks fire but have no access to the Telegram channel. Claude Code terminal launched with `--channels` is required. CronCreate handles scheduling within that session.
 - **`/start-cos` not found:** The global command file is missing. Create `~/.claude/commands/start-cos.md` using the contents in the section below.
 
@@ -195,9 +171,10 @@ Store this at `~/.claude/commands/start-cos.md`. Not tracked in git — must be 
 ```markdown
 You are my Chief of Staff. Execute the following startup sequence:
 
-1. Read `PersonalOS/chief-of-staff/CLAUDE.md` — this is your full operating instructions and persona.
-2. Read `PersonalOS/chief-of-staff/start-cos.md` — this has the cron schedule definitions.
-3. Check whether `PersonalOS/chief-of-staff/state/today.md` exists and is dated today.
-   - If yes: resume from it. Do not re-run the full brief. Send the existing slate to Telegram with a note: "Resuming from earlier session."
-   - If no: set up all cron jobs defined in the Cron Schedule section of start-cos.md, then run the morning brief.
+1. Read `C:\Users\kheti\workspaces\alfred\CLAUDE.md` — full operating instructions and persona.
+2. Read `C:\Users\kheti\workspaces\alfred\start-cos.md` — runtime cron schedule definitions.
+3. Set up the runtime cron jobs defined in the Cron Schedule section of start-cos.md (midday + afternoon nudges + EOD digest send + Content Scout). The morning-brief, end-of-day-wrap, and nightly-organize skills run via Windows Task Scheduler from the brain — do NOT create crons for them here.
+4. Read `C:\Users\kheti\brain\daily\<today>.md`:
+   - If it exists with `status: active`: send the morning digest to Telegram per CLAUDE.md format.
+   - If it doesn't exist yet (Task Scheduler hasn't fired or failed): surface a system event in Telegram, do NOT synthesize a brief yourself.
 ```
