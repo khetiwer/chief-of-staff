@@ -15,7 +15,7 @@ network-accountability-agent-spec.md
 *.pem
 
 # Claude Code session data — exclude runtime/local-only files
-.claude/settings.json
+.claude/settings.local.json
 .claude/scheduled_tasks.lock
 
 # Personal scratch / explainer artifacts — not part of the project
