@@ -27,7 +27,7 @@ reports/YYYY-MM-DD.md   — Weekly pipeline summaries. Written by `weekly` comma
 
 ### Contact CRM
 
-Contact files live in `_shared/contacts/` — outside this repo. One markdown file per person (`firstname-lastname.md`). Schema defined below. The agent reads these files; it does not write to a database.
+Contact files live in `brain/wiki/people/` — outside this repo. One markdown file per person (`firstname-lastname.md`). Schema defined below. The agent reads these files; it does not write to a database.
 
 ---
 
@@ -316,7 +316,7 @@ Completed: N | Skipped: N | Rolled: [names]
 | Agent architecture | One agent, modular CLAUDE.md — no external orchestration | Multiple specialized agents; Python bot; Zapier; n8n | Cross-domain connections require shared context; external orchestration adds infra with no benefit at this scale |
 | Gmail triage | Two-track (networking scan inline + triage via skill) | One unified Gmail module | Scope mismatch: targeted contact check ≠ full inbox management |
 | State storage | Markdown files | JSON, SQLite | Readable, editable, gitignore-able, no dependencies |
-| Contact storage | `_shared/contacts/` outside repo | Inside repo | Keeps personal data separate from publishable code |
+| Contact storage | `brain/wiki/people/` outside repo | Inside repo | Keeps personal data separate from publishable code |
 | Weekly report | `weekly` command from session logs | Real-time contact scan | Session logs are already structured; avoids re-scanning full CRM |
 | Work COS | Separate future agent | Extend this agent | Work and personal context should not bleed; credentials differ |
 | `done` command flow | Gmail-first: check sent mail before asking user | Ask user immediately | Gap found after first live brief — sent email contains the full interaction detail; asking user is redundant when Gmail has the answer |

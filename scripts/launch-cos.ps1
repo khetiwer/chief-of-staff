@@ -15,11 +15,11 @@ if ($bun) {
     Write-Host "No bun processes running. Clean start." -ForegroundColor Green
 }
 
-# ── Step 2: Navigate to AI Workspace ─────────────────────────────────────────
-# Claude reads relative paths from this directory (contacts, state files, etc.)
-# Do NOT change this to the chief-of-staff folder — the COS needs visibility
-# across all folders under AI Workspace (_shared/contacts, Projects, etc.)
-Set-Location "C:\Users\kheti\OneDrive\Documents\AI Workspace"
+# ── Step 2: Navigate to alfred workspace ─────────────────────────────────────
+# Claude launches from the alfred workspace (per the brain/workspace split).
+# Cross-cwd reads (brain\wiki\people, other workspaces) use absolute paths
+# spelled out in CLAUDE.md and start-cos.md.
+Set-Location "C:\Users\kheti\workspaces\alfred"
 
 # ── Step 3: Launch Claude with Telegram channel enabled ──────────────────────
 Write-Host ""

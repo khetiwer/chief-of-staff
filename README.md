@@ -84,7 +84,7 @@ It does not wait to be asked. It pushes.
 - Telegram bot configured (see `.claude/settings.local.json`)
 
 ### Contact Files
-Contacts live in `_shared/contacts/` as markdown files (`firstname-lastname.md`). The agent reads these files — it does not write to any database. The full contact file schema is documented in `SPEC.md`; for a standalone PeopleCRM setup, that schema belongs in its own README.
+Contacts live in `brain/wiki/people/` as markdown files (`firstname-lastname.md`). The agent reads these files — it does not write to any database. The full contact file schema is documented in `SPEC.md`; for a standalone PeopleCRM setup, that schema belongs in its own README.
 
 ### Key Paths (configure for your setup)
 ```
