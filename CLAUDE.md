@@ -258,6 +258,13 @@ Commands act on either (a) the brain daily file (`C:\Users\kheti\brain\daily\<to
 
 If Khet sends a Telegram message that is not a recognized command (e.g., a quick thought, a shared link, a reference to a voice note), append it to `state/telegram-captures.md` automatically and react with a check-mark to confirm capture. `nightly-organize` reads this log overnight.
 
+**Operational annotation (same-day slate impact):** Before capturing, re-read `brain\daily\<today>.md` (Alfred does this before any action anyway) and check whether the message reports a status or timing change to an item on **today's slate** — whether that item is a person (e.g., "rescheduled with Tracey") or a standalone task (e.g., "set up the LLC bank account, done"). If it does, in addition to capturing, annotate that daily-file item with an `alfred [HH:MM]:` sub-bullet and update its checkbox (`- [x]` done, `⏭` moved, etc.) so the midday and afternoon crons don't re-nudge Khet about something already handled. The check reduces to a file lookup, not a judgment call: find the matching slate item, or there isn't one.
+
+- This is not scoped to contacts. Any slate item qualifies — person follow-ups and non-person tasks alike.
+- For **person** items, the daily-file annotation only suppresses re-nudging. The rich CRM / contact-file synthesis still waits for `nightly-organize`, which reads the verbatim capture overnight. Do not write the contact file interactively for an un-commanded update (that's still nightly's job, per concern 2).
+- For **non-person tasks**, there is no contact file to synthesize, so the daily-file annotation is the complete action. `end-of-day-wrap` rolls it into the EOD addendum.
+- If it's ambiguous whether the message maps to a slate item or what changed, ask one clarifying question before annotating, rather than guessing or letting nightly guess.
+
 ---
 
 ## CRM updates from passive sources
