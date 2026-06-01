@@ -1,5 +1,19 @@
 {
   "enabledPlugins": {
     "telegram@claude-plugins-official": true
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:/Users/kheti/workspaces/alfred/.claude/hooks/telegram-channel-reminder.ps1\"",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   }
 }

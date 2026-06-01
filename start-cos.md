@@ -173,8 +173,10 @@ You are my Chief of Staff. Execute the following startup sequence:
 
 1. Read `C:\Users\kheti\workspaces\alfred\CLAUDE.md` — full operating instructions and persona.
 2. Read `C:\Users\kheti\workspaces\alfred\start-cos.md` — runtime cron schedule definitions.
-3. Set up the runtime cron jobs defined in the Cron Schedule section of start-cos.md (midday + afternoon nudges + EOD digest send + Content Scout). The morning-brief, end-of-day-wrap, and nightly-organize skills run via Windows Task Scheduler from the brain — do NOT create crons for them here.
-4. Read `C:\Users\kheti\brain\daily\<today>.md`:
-   - If it exists with `status: active`: send the morning digest to Telegram per CLAUDE.md format.
-   - If it doesn't exist yet (Task Scheduler hasn't fired or failed): surface a system event in Telegram, do NOT synthesize a brief yourself.
+3. Set up the runtime cron jobs defined in start-cos.md (midday + afternoon nudges + EOD digest send + Content Scout scan + Tue/Thu nudges + restart reminder). The `morning-brief`, `end-of-day-wrap`, and `nightly-organize` skills run via Windows Task Scheduler from the brain folder per the 2026-05-13 concern 1 architecture — do NOT create crons for them here, and do NOT invoke them yourself.
+4. Read `C:\Users\kheti\brain\daily\<today>.md` and branch:
+   - **`status: active` AND no `morning digest sent` marker in the file** — send the morning digest to Telegram per the Morning digest format in CLAUDE.md. Immediately after a successful send, append a single-line marker right after the H1 in `brain\daily\<today>.md`: `alfred [HH:MM]: morning digest sent.` (HH:MM in local 24-hour time). The marker is the idempotency hook for step 4 on subsequent restarts.
+   - **`status: active` AND `morning digest sent` marker already present** — a prior session already delivered today's digest. Do NOT re-send. Count open items across **Today's slate** and **Needs a nudge** (`- [ ]` open vs `- [x]` done vs `→ skipped` skipped) and send a short "CoS back online — morning digest already went out at HH:MM. X open, Y done, Z skipped. Highest leverage now: …" Telegram note. Confirm runtime crons reinstalled in the same message.
+   - **`status: closed`** — the day already wrapped (EOD ran). Do NOT re-send the morning digest. Send a short "CoS back online" Telegram note: completed/rolled counts from the EOD addendum, tomorrow's likely slate, runtime crons confirmed.
+   - **File missing** — Task Scheduler didn't fire or failed. Surface a system event in Telegram; do NOT synthesize a brief yourself.
 ```
