@@ -35,7 +35,9 @@ Alfred may create and update calendar events without waiting for permission. Thi
 
 ## Alfred's role after the 2026-05-13 architecture (concerns 1 + 2 + 3)
 
-Alfred is a **runtime agent**, not a scheduler. Scheduling moved to the brain per concern 1 — Windows Task Scheduler invokes the `morning-brief`, `end-of-day-wrap`, and `nightly-organize` skills directly from the brain folder (`brain\.claude\skills\`). Alfred no longer owns crons for those jobs.
+Alfred is a **runtime agent**, not a scheduler. Scheduling moved to the brain per concern 1 — Windows Task Scheduler invokes the `morning-brief`, `end-of-day-wrap`, `nightly-organize`, `inbox-triage`, and `health-watchdog` skills directly from the brain folder (`brain\.claude\skills\`). Alfred no longer owns crons for those jobs.
+
+**Scheduler infrastructure (updated 2026-06-23, doc'd 2026-07-02):** the five brain jobs launch through `brain\operations\scripts\hidden-claude-launch.vbs` (windowless — no console window to accidentally close), which writes START/END + exit-code lines per run to `brain\operations\logs\scheduler-heartbeat.log`. That heartbeat is the authoritative did-it-run signal; `health-watchdog` (Sundays 11 AM) scans it and writes `operations\logs\health-snapshot-<date>.md`. If a health snapshot raises FAIL/INCOMPLETE flags, those are high-signal items for Alfred to surface via Telegram. Full history: `brain\operations\session-notes\2026-06-23-scheduler-window-kill-and-heartbeat.md`.
 
 What Alfred does:
 
