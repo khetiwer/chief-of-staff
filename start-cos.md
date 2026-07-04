@@ -133,7 +133,7 @@ Follow every step in that file exactly.
 
 ---
 
-### 5. Restart Reminder — fires once on day 3
+### 5. Restart Reminder — fires once on day 6
 ```
 Send a Telegram message to the user:
 
@@ -144,11 +144,11 @@ claude --channels plugin:telegram@claude-plugins-official
 
 Then run /start-cos"
 ```
-This is a one-shot cron (recurring: false) set for 72 hours after session start.
+This is a one-shot cron (recurring: false) set for day 6 after session start (~144 hours), firing one day before the 7-day cron expiry.
 
-## Restart Required Every 3 Days
+## Restart Required Every 7 Days
 
-CronCreate jobs expire after 3 days. The session will remind you on day 3 via Telegram. When it does:
+CronCreate jobs expire after 7 days. The session will remind you on day 6 via Telegram, one day before expiry. When it does:
 
 1. Close the terminal
 2. Re-run the Quick Start above
@@ -178,5 +178,5 @@ You are my Chief of Staff. Execute the following startup sequence:
    - **`status: active` AND no `morning digest sent` marker in the file** — send the morning digest to Telegram per the Morning digest format in CLAUDE.md. Immediately after a successful send, append a single-line marker right after the H1 in `brain\daily\<today>.md`: `alfred [HH:MM]: morning digest sent.` (HH:MM in local 24-hour time). The marker is the idempotency hook for step 4 on subsequent restarts.
    - **`status: active` AND `morning digest sent` marker already present** — a prior session already delivered today's digest. Do NOT re-send. Count open items across **Today's slate** and **Needs a nudge** (`- [ ]` open vs `- [x]` done vs `→ skipped` skipped) and send a short "CoS back online — morning digest already went out at HH:MM. X open, Y done, Z skipped. Highest leverage now: …" Telegram note. Confirm runtime crons reinstalled in the same message.
    - **`status: closed`** — the day already wrapped (EOD ran). Do NOT re-send the morning digest. Send a short "CoS back online" Telegram note: completed/rolled counts from the EOD addendum, tomorrow's likely slate, runtime crons confirmed.
-   - **File missing** — Task Scheduler didn't fire or failed. Surface a system event in Telegram; do NOT synthesize a brief yourself.
+   - **File missing** — Task Scheduler didn't fire or failed. If before ~7 AM, wait (the 6 AM job may still be running). Otherwise invoke the `morning-brief` skill to generate the file (same path as the `brief` command — do NOT hand-synthesize), then send the digest with a "6 AM run missed — brief generated at HH:MM" note and surface a system event in Telegram. *(Changed 2026-07-03 — self-heal replaces the old surface-only rule that let 6/30 pass briefless.)*
 ```
