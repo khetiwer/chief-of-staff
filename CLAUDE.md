@@ -16,7 +16,7 @@ Khet's direction, verbatim intent: three priorities need continued attention eve
 |---|---|---|
 | **1. Open Doors fractional** | Delivery on the live engagement, check-ins, invoicing rhythm, anything the client is waiting on | [[open-doors-fractional]] project page, OD calendar events |
 | **2. Advisory business build** | Free intros → paid conversions, same-day leave-behinds, pipeline, entity/payment admin, **LinkedIn posting (see below)** | [[ai-advisory]], [[chosen-solutions-setup]], `brain\reference\linkedin-strategy.md` |
-| **3. Networking / recruiting warmth** | Advocate bench, warm-intro paths, keeping recruiting-relevant relationships alive; the background FT search rides here | [[networking-playbook]], `life-goals.md` (Networking), contact wiki, [[job-search]] |
+| **3. Networking / recruiting warmth** | Advocate bench (the recommitted 5-by-7/31 OKR + 3 convos/week that serve it), warm-intro paths, keeping recruiting-relevant relationships alive. **Recruiting runs 100% through networking (Khet, 2026-07-03)** — no application volume target; selective blind applies to exceptional roles are Khet-initiated only, and even those lead with a connection. Never nag an application count. | [[networking-playbook]], `life-goals.md` (Networking), contact wiki, [[job-search]] |
 
 **Balance rules:**
 - **Every lane gets attention every week.** Weights vary — a client deadline can make OD 60% of a week — but a lane at zero for a full week requires Khet's explicit "parked this week," never silence. The Friday weekly report scores actual attention per lane; the Monday digest proposes the coming week's weights (one-line, Khet can adjust in one Telegram reply).
@@ -69,7 +69,10 @@ Khet wants Alfred to spot where a specialized agent, skill, or tool would move a
 **On approval:** the build happens in a workspace session (code lives in workspaces, never the brain), gets tracked under Active Builds in `state/goals.md`, and its learnings flow to the relevant brain page.
 
 **Standing suggestion queue** (proposed, awaiting Khet's yes/no — do not build):
-1. **Viral-post researcher** — extend the existing LinkedIn viral post tracker (`workspaces\training-courses\tina-executive-ai-operating-system-bootcamp\Operate\linkedin-viral-tracker\`) into an agent that researches what's performing in the advisory ICP's feed and turns findings into ready-to-publish draft candidates. Evidence: five straight 0-post weeks; the stated bottleneck is posting friction, not ideas — this attacks the draft-supply half so Alfred's calendar-anchor attacks the publish half. *(Khet named this example herself in the v3 direction — still needs her explicit go.)*
+1. *(none open)*
+
+**Approved and built:**
+- **Viral-post researcher / ICP repurpose layer — APPROVED by Khet 2026-07-03, v1 built same day.** The viral tracker (`workspaces\training-courses\tina-executive-ai-operating-system-bootcamp\Operate\linkedin-viral-tracker\`) now scores every viral post against the advisory ICP ("Bob", canon: [[ai-advisory]] 2026-06-25 via `meta.icp`) and writes `repurpose-queue.md` — top 5 posts with angle + voice-conforming hook seeds, refreshed each run at **zero added Apify spend** (analysis layer only; the $3.00/month ceiling is untouched, per Khet's cost constraint). The queue is a named draft source in the morning brief's LinkedIn slot rule. Khet flagged she hasn't fully thought the tool through — treat v1 as a base to iterate on her feedback, not a finished spec.
 
 ---
 
@@ -273,7 +276,7 @@ On Fridays, the `end-of-day-wrap` skill (invoked by Task Scheduler) also produce
 ```
 📊 Weekly report:
 - Lanes: OD <moved/held/dark> | Advisory <moved/held/dark> (LinkedIn N/3) | Network <moved/held/dark>
-- Counters: Convos N/3 | Applied N/5 | LinkedIn N/3 (floor 1)
+- Counters: Convos N/3 (advocate push) | LinkedIn N/3 (floor 1) | Applied: log-only, no target
 - Ball-in-court backlog: N contacts
 - Chronically rolled: <names with 3+ rolls>
 - Active builds: <list> | Suggestions awaiting yes/no: <count>
