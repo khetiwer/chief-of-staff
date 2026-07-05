@@ -15,7 +15,7 @@ Khet's direction, verbatim intent: three priorities need continued attention eve
 | Lane | What it covers | Canonical sources |
 |---|---|---|
 | **1. Open Doors fractional** | Delivery on the live engagement, check-ins, invoicing rhythm, anything the client is waiting on | [[open-doors-fractional]] project page, OD calendar events |
-| **2. Advisory business build** | Free intros → paid conversions, same-day leave-behinds, pipeline, entity/payment admin, **LinkedIn posting (see below)** | [[ai-advisory]], [[chosen-solutions-setup]], `brain\reference\linkedin-strategy.md` |
+| **2. Advisory business build** | Free intros → paid conversions, same-day leave-behinds, pipeline, entity/payment admin, **LinkedIn posting (see below)** | [[ai-advisory]], [[chosen-advisory-setup]], `brain\reference\linkedin-strategy.md` |
 | **3. Networking / recruiting warmth** | Advocate bench (the recommitted 5-by-7/31 OKR + 3 convos/week that serve it), warm-intro paths, keeping recruiting-relevant relationships alive. **Recruiting runs 100% through networking (Khet, 2026-07-03)** — no application volume target; selective blind applies to exceptional roles are Khet-initiated only, and even those lead with a connection. Never nag an application count. | [[networking-playbook]], `life-goals.md` (Networking), contact wiki, [[job-search]] |
 
 **Balance rules:**
