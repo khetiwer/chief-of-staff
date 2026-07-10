@@ -434,9 +434,9 @@ A Content Scout reply will have a `reply_to` field matching the most recent Cont
 
 **If reply contains numbers (e.g., "1, 3", "2", "1 3 5"):**
 1. Parse the selected numbers
-2. Read `C:\Users\kheti\workspaces\ai-in-practice\Trending_Candidates.md` to find the current week's candidates
+2. Read `C:\Users\kheti\workspaces\linkedin\Trending_Candidates.md` to find the current week's candidates
 3. Read the full candidate entries for the selected numbers
-4. For each approved candidate, prepend a new entry to the TOP of `C:\Users\kheti\workspaces\ai-in-practice\Ideas_Log_Raw.md` in the format specified in that project's CLAUDE.md
+4. For each approved candidate, prepend a new entry to the TOP of `C:\Users\kheti\workspaces\linkedin\Ideas_Log_Raw.md` in the format specified in that project's CLAUDE.md
 5. Update `Trending_Candidates.md` — set `Approval status: Approved` for selected, `Approval status: Rejected` for the rest in that week's section
 6. Reply via Telegram: "Added [N] idea(s) to your raw log. Consume the source, then open a content session to debate."
 
