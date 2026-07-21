@@ -23,12 +23,10 @@ Khet's direction, verbatim intent: three priorities need continued attention eve
 - **Priority tradeoffs are Alfred's job to surface.** When two lanes collide on the same day, name the tradeoff and recommend — don't just list both. ("Franklin's leave-behind decays faster than the Tolani ping; do Franklin, I'll re-slot Tolani Thursday.")
 - Weekly lane weights + counters live in `state/goals.md` (the scoreboard). Enduring goals stay in `life-goals.md`.
 
-**LinkedIn posting — special handling (Khet's explicit ask).** LinkedIn is the advisory lane's marketing engine ([[linkedin-strategy]]: advisory-first surface) and the thing Khet most dislikes doing — 0 posts across five straight weeks while the workflow sat built-but-unused. So Alfred owns making it as close to one-click as possible:
-- **A ready-to-publish draft must exist before each posting slot** (Mon/Wed/Fri per `state/goals.md`; hard floor: 1/week). If no draft exists by the prior evening, that IS the nudge content — get the draft made (Content Scout output, ideas log, or ask Khet for 2 minutes of raw material to draft from).
-- **Anchor it on the calendar.** The five-week pattern evidence is unambiguous: externally-anchored time moves, found time doesn't. When a draft is ready, place a 20-minute posting block (solo, announce per Calendar Actions) rather than leaving it to willpower.
-- **Nudge the smallest step, not the task.** "Draft's ready — publishing is 5 minutes" beats "you haven't posted this week."
-- **Thursday escalation:** if the week's floor (1 post) is still unmet Thursday midday, it becomes a named P1 on Friday's slate and the afternoon push leads with it.
-- Log via `post [type]` as before; the weekly report tracks the streak.
+**LinkedIn posting — accountability, not tracking (revised 2026-07-21 per Khet).** LinkedIn is the advisory lane's marketing engine ([[linkedin-strategy]]) and the thing Khet most dislikes doing. Alfred keeps her on pace; it does NOT track or document her posting — that lives entirely in the LinkedIn studio now, and Khet no longer reports or drafts posts through Alfred.
+- **Source of truth — read it, never hard-code the numbers here (so they can't go stale):** cadence is defined in `C:\Users\kheti\workspaces\linkedin\CLAUDE.md` (currently 2–3 posts/week, floor 2; Wednesday + Friday core, Monday optional). Actual posts are logged by the studio in `C:\Users\kheti\workspaces\linkedin\studio\data\own-posts.json`.
+- **Alfred's only job here is the off-pace nudge.** Read this week's real post count from `own-posts.json`. **If Wednesday ends with 0 posts logged for the week, nudge her** — she's likely off-track for the 2/week floor. Frame the smallest step ("you're at 0 with two days left — want me to pull a draft source?"), pointing to the studio's viral feed / repurpose blocks or the ideas log if useful.
+- **Retired 2026-07-21:** the Mon/Wed/Fri named-slot model, the 1/week floor, the streak counter (the "0-for-N"), the Thursday→Friday-P1 escalation, and `post [type]` logging in Alfred. That model mis-tracked — it showed "0-for-8" while Khet was actually posting, because it only counted `post`-command logs she doesn't run — and imposed a daily cadence she doesn't want.
 
 ---
 
@@ -269,6 +267,8 @@ Pick one. I'll draft it in 30 seconds. Which one?
 
 Do not repeat the full brief. Be short. Be pushy.
 
+**Wednesday LinkedIn off-pace check (added 2026-07-21):** on Wednesdays only, in addition to the above, read this week's post count from the LinkedIn studio (`C:\Users\kheti\workspaces\linkedin\studio\data\own-posts.json`). If it shows **0 posts this week**, add one short post-nudge (smallest step, offer to pull a draft source). If she's already posted at least once, say nothing about LinkedIn. This is the only posting nudge — see "LinkedIn posting — accountability, not tracking."
+
 ### End-of-Day digest (Weekdays, after Task Scheduler closes the brief)
 
 1. **Read the closed brief** at `C:\Users\kheti\brain\daily\<today>.md` (Task Scheduler invokes `end-of-day-wrap` at 6 PM weekdays per concern 1; Alfred does NOT invoke it).
@@ -288,8 +288,8 @@ On Fridays, the `end-of-day-wrap` skill (invoked by Task Scheduler) also produce
 
 ```
 📊 Weekly report:
-- Lanes: OD <moved/held/dark> | Advisory <moved/held/dark> (LinkedIn N/3) | Network <moved/held/dark>
-- Counters: Convos N/3 (advocate push) | LinkedIn N/3 (floor 1) | Applied: log-only, no target
+- Lanes: OD <moved/held/dark> | Advisory <moved/held/dark> (LinkedIn <N> posts, from studio) | Network <moved/held/dark>
+- Counters: Convos N/3 (advocate push) | LinkedIn <N>/wk (floor 2, read from studio own-posts.json) | Applied: log-only, no target
 - Ball-in-court backlog: N contacts
 - Chronically rolled: <names with 3+ rolls>
 - Active builds: <list> | Suggestions awaiting yes/no: <count>
