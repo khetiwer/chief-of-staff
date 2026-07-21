@@ -59,7 +59,7 @@ Open a new PowerShell window after saving. Type `cos` to launch.
 
 These are the **runtime crons** the CoS session must create on every startup using CronCreate. All times are local (ET). Weekdays only unless noted.
 
-Per the 2026-05-13 concern 1 architecture, the `morning-brief`, `end-of-day-wrap`, and `nightly-organize` skills run via Windows Task Scheduler from the brain folder — NOT via Alfred's CronCreate. Alfred's runtime crons cover only midday + afternoon nudges (no synthesis needed) and Content Scout. Once a startup session creates these runtime crons, the heavy scheduled jobs already fire from Task Scheduler regardless of Alfred's session state.
+Per the 2026-05-13 concern 1 architecture, the `morning-brief`, `end-of-day-wrap`, and `nightly-organize` skills run via Windows Task Scheduler from the brain folder — NOT via Alfred's CronCreate. The LinkedIn content jobs (viral scan, weekend nudge) run the same way as of 2026-07-21 (see "Content jobs — RETIRED as Alfred crons" below). Alfred's runtime crons cover only midday + afternoon nudges + EOD digest send + the restart reminder. Once a startup session creates these runtime crons, the heavy scheduled jobs already fire from Task Scheduler regardless of Alfred's session state.
 
 ### 1. Morning digest send — fires once at startup (Alfred runtime, not a cron)
 
@@ -106,30 +106,16 @@ The Task Scheduler job writes the canonical files; this cron only renders the Te
 
 ---
 
-## Content Scout Crons
+## Content jobs — RETIRED as Alfred crons (2026-07-21)
 
-These run every week regardless of weekday/weekend. Times are local (ET). Unchanged in chunk 6.
+The old Content Scout crons (Sunday scan + Tue/Thu nudges) are **retired**. The `ai-in-practice` workspace was rebuilt as the `linkedin` "studio" model; the Content Scout prompts are archived at `..\linkedin\archive\scheduled-content-jobs-pre-studio\` and are no longer wired to anything.
 
-### 6. Content Scout Scan — `0 19 * * 0` (Sunday 7:00 PM)
-```
-Read and execute the prompt at: ../ai-in-practice/scheduled/content-scout-scan/PROMPT.md
+Content scheduling now follows the same brain/Alfred split as the synthesis skills — **Windows Task Scheduler owns it, Alfred does NOT create crons for it.** Per `..\linkedin\CLAUDE.md` (§Scheduled jobs):
 
-Follow every step in that file exactly. It will scan Gmail newsletters, run web searches, write candidates to Trending_Candidates.md, and send a Telegram push. Then handle Khet's approval reply per the instructions in that prompt file.
-```
+- **Brain - LinkedIn Viral Scan** — daily 7:15 AM (Task Scheduler runs the `linkedin-viral-scan` skill headlessly; writes the posts store).
+- **Brain - LinkedIn Weekend Nudge** — Saturday 9 AM (Task Scheduler runs the `linkedin-weekend-nudge` skill headlessly; it pushes its own Telegram message via `brain\operations\setup\send-telegram.ps1`).
 
-### 7. Content Tuesday Nudge — `0 17 * * 2` (Tuesday 5:00 PM)
-```
-Read and execute the prompt at: ../ai-in-practice/scheduled/content-tuesday-nudge/PROMPT.md
-
-Follow every step in that file exactly.
-```
-
-### 8. Content Thursday Nudge — `0 17 * * 4` (Thursday 5:00 PM)
-```
-Read and execute the prompt at: ../ai-in-practice/scheduled/content-thursday-nudge/PROMPT.md
-
-Follow every step in that file exactly.
-```
+Alfred creates **no** cron for either. Do not recreate the Content Scout crons on startup.
 
 ---
 
@@ -173,7 +159,7 @@ You are my Chief of Staff. Execute the following startup sequence:
 
 1. Read `C:\Users\kheti\workspaces\alfred\CLAUDE.md` — full operating instructions and persona.
 2. Read `C:\Users\kheti\workspaces\alfred\start-cos.md` — runtime cron schedule definitions.
-3. Set up the runtime cron jobs defined in start-cos.md (midday + afternoon nudges + EOD digest send + Content Scout scan + Tue/Thu nudges + restart reminder). The `morning-brief`, `end-of-day-wrap`, and `nightly-organize` skills run via Windows Task Scheduler from the brain folder per the 2026-05-13 concern 1 architecture — do NOT create crons for them here, and do NOT invoke them yourself.
+3. Set up the runtime cron jobs defined in start-cos.md (midday + afternoon nudges + EOD digest send + restart reminder). The `morning-brief`, `end-of-day-wrap`, and `nightly-organize` skills — and the LinkedIn content jobs (viral scan, weekend nudge) — run via Windows Task Scheduler from the brain folder per the 2026-05-13 concern 1 architecture — do NOT create crons for them here, and do NOT invoke them yourself.
 4. Read `C:\Users\kheti\brain\daily\<today>.md` and branch:
    - **`status: active` AND no `morning digest sent` marker in the file** — send the morning digest to Telegram per the Morning digest format in CLAUDE.md. Immediately after a successful send, append a single-line marker right after the H1 in `brain\daily\<today>.md`: `alfred [HH:MM]: morning digest sent.` (HH:MM in local 24-hour time). The marker is the idempotency hook for step 4 on subsequent restarts.
    - **`status: active` AND `morning digest sent` marker already present** — a prior session already delivered today's digest. Do NOT re-send. Count open items across **Today's slate** and **Needs a nudge** (`- [ ]` open vs `- [x]` done vs `→ skipped` skipped) and send a short "CoS back online — morning digest already went out at HH:MM. X open, Y done, Z skipped. Highest leverage now: …" Telegram note. Confirm runtime crons reinstalled in the same message.
