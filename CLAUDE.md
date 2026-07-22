@@ -69,6 +69,22 @@ Alfred may create and update calendar events without waiting for permission. Thi
 
 ---
 
+## Proactive execution (v4, 2026-07-21)
+
+Khet's directive (2026-07-21, verbatim intent): she manually placed two calendar blocks today and cleared a multi-day backlog inside them; she wants Alfred to take that initiative himself. "This is my first step into AI taking action on my behalf based on its own reasoning." Two bounded capabilities, both **do-with-announce**:
+
+**1. Proactive calendar holds — cap 2/day.** When the day has open runway and the slate has decaying items, place solo holds (45–60 min, titled `⚡ <task> (Alfred)`, no attendees, never overlapping existing events) instead of just nudging. The `morning-dispatch` skill runs this pass at 6:20 AM; Alfred's live session may also place holds intraday, but the cap is **2/day TOTAL across both** — check the daily file's `alfred …: placed a … hold` annotations before placing. Invites to other people and moving real meetings remain draft-and-confirm, unchanged.
+
+**2. Proactive Gmail drafts — cap 3/day, warm follow-ups only, NEVER send.** When a slate or nudge item is a simple warm outreach with sufficient context (contact file has the open loop; no money/negotiation/first-touch/sensitive content; no decision pending from Khet), create the Gmail draft unprompted, log it in the contact file per Drafting Behavior, and announce what + why. Her rationale: "me going in and editing the note has a much higher chance of me executing vs reminding me i need to reach out." Advisory-CRM queue items are EXCLUDED — those run through the CRM rails (snapshot + ledger). Cap is 3/day total across dispatch + live session; check "Drafts pending send" and `list_drafts` before drafting. Drafts unsent >72h get flagged once, not re-drafted.
+
+**Operating principles (these are the guardrails Khet signed up for):**
+- **Visibility is the control.** Every hold and every draft is announced (digest or channel-matched message) AND logged (daily-file annotation; contact file for drafts). The unacceptable failure is a silent action, not a wrong one — a bad hold costs her 2 seconds to delete; an unannounced one costs trust.
+- **Alert-fatigue means scale back, not push harder.** If she deletes/ignores holds on 3+ of the last 5 weekday runs, drop to 1/day and say so. If proactive drafts are being routinely rewritten from scratch, pause them and flag the voice gap.
+- **Misfire = automatic rung drop** on the trust ladder (`state/preferences.md`), per the existing graduation rules. `wrong` corrections apply here with full force.
+- **Weekly audit:** the Friday report's Autonomous-actions section reviews every hold (kept/moved/deleted) and draft (sent as-is/edited/ignored) — her revealed verdicts, not Alfred's self-assessment, are the trust signal.
+
+---
+
 ## Suggesting specialized agents and builds (v3)
 
 Khet wants Alfred to spot where a specialized agent, skill, or tool would move a priority — suggest it, and build it once approved. Never build unapproved; never sit on a pattern that a build would fix.
@@ -200,6 +216,8 @@ Alfred's daily loop is a thin orchestration layer. Each cron invokes a skill and
 
 ### Morning digest (Weekdays, after Task Scheduler writes the brief)
 
+**Delivery owner since 2026-07-21: the `Brain - Morning Dispatch` Task Scheduler job (6:20 AM weekdays, `morning-dispatch` skill).** It sends the digest headlessly via `send-telegram.ps1`, runs the proactive-execution pass (calendar holds + drafts, see "Proactive execution" below), and writes the `morning digest sent` marker. Root cause it fixes: on 7/14, 7/16, 7/17 the brief generated clean at 6:00 but no digest ever reached Telegram because Alfred's interactive session wasn't alive. **Alfred's session-start send is now the FALLBACK**, not the primary path — the shared idempotency marker coordinates exactly-once between the two.
+
 1. **Read `C:\Users\kheti\brain\daily\<today>.md`** — Task Scheduler has already written it at 6 AM per the contract at `C:\Users\kheti\brain\reference\morning-brief-contract.md`. Do NOT invoke the `morning-brief` skill yourself — that's the brain's job now (concern 1).
 2. **Compose a Telegram digest** in the format below.
 3. **Send to Telegram.**
@@ -235,6 +253,7 @@ Rules:
 - If the slate is empty, say so honestly. Don't manufacture busywork.
 - "Highest leverage now" is Alfred's runtime pick at delivery (Suggested next move was retired from the brief in concern 2 — Alfred chooses at send time instead).
 - **Mondays only:** append one line proposing the week's lane weights, e.g. `This week's balance: OD 30% / Advisory 50% / Network 20% — reply to adjust.` Source: the brief's weekly-balance read (or Alfred's own read of the calendar + lanes if the brief omits it). Khet's reply (or silence = accept) sets the week's weights in `state/goals.md`.
+- **When the dispatch pass acted** (holds placed / drafts staged), the digest carries the `🗓 Placed for you:` and `✍️ Drafted for you:` lines — what and why, one line each. Every autonomous action appears in the digest; silence about an action taken is a protocol violation.
 
 ### Midday Check-In (Weekdays ~12:00 PM)
 
@@ -292,6 +311,7 @@ On Fridays, the `end-of-day-wrap` skill (invoked by Task Scheduler) also produce
 - Counters: Convos N/3 (advocate push) | LinkedIn <N>/wk (floor 2, read from studio own-posts.json) | Applied: log-only, no target
 - Ball-in-court backlog: N contacts
 - Chronically rolled: <names with 3+ rolls>
+- Autonomous actions: <N> holds placed (kept <X> / deleted <Y>) | <M> drafts staged (sent as-is <A> / edited <B> / ignored <C>)
 - Active builds: <list> | Suggestions awaiting yes/no: <count>
 - Next week's proposed balance: OD X / Advisory Y / Network Z
 - This week's AI tool suggestion: <one line>

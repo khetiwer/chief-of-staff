@@ -61,9 +61,9 @@ These are the **runtime crons** the CoS session must create on every startup usi
 
 Per the 2026-05-13 concern 1 architecture, the `morning-brief`, `end-of-day-wrap`, and `nightly-organize` skills run via Windows Task Scheduler from the brain folder — NOT via Alfred's CronCreate. The LinkedIn content jobs (viral scan, weekend nudge) run the same way as of 2026-07-21 (see "Content jobs — RETIRED as Alfred crons" below). Alfred's runtime crons cover only midday + afternoon nudges + EOD digest send + the restart reminder. Once a startup session creates these runtime crons, the heavy scheduled jobs already fire from Task Scheduler regardless of Alfred's session state.
 
-### 1. Morning digest send — fires once at startup (Alfred runtime, not a cron)
+### 1. Morning digest send — startup FALLBACK only (since 2026-07-21)
 
-At startup, after creating the cron jobs below, Alfred reads `C:\Users\kheti\brain\daily\<today>.md` (already written by Task Scheduler at 6 AM) and sends the morning Telegram digest per the Morning digest format in CLAUDE.md. This is a one-time action at session start, not a recurring cron.
+The **`Brain - Morning Dispatch` Task Scheduler job (6:20 AM weekdays, `morning-dispatch` skill)** now owns the morning digest send — it delivers headlessly via `send-telegram.ps1` and writes the `morning digest sent` marker, so the digest arrives even when no Alfred session is running. At startup, Alfred reads `C:\Users\kheti\brain\daily\<today>.md` and sends the digest ONLY if the marker is absent (the dispatch job failed or hasn't fired yet). The marker check is mandatory — never double-send.
 
 ### 2. Midday Check-In — `3 12 * * 1-5` (~12:00 PM)
 ```
